@@ -18,20 +18,27 @@ app.get('*', (req, res) => sendFile(res, 'index'));
 
 // API Routes
 app.get('/api/notes', (req, res) => {
-  const notes = JSON.parse(fs.readFileSync('db/db.json', 'utf8'));
-  res.json(notes);
-});
-
-app.post('/api/notes', (req, res) => {
-  const { body } = req;
-  const notes = JSON.parse(fs.readFileSync('db/db.json', 'utf8'));
-
-  body.id = generateUniqueId();
-  notes.push(body);
-
-  fs.writeFileSync('db/db.json', JSON.stringify(notes));
-  res.json(body);
-});
+    try {
+      const notesData = fs.readFileSync('db/db.json', 'utf8');
+      const notes = notesData ? JSON.parse(notesData) : [];
+      res.json(notes);
+    } catch (error) {
+      console.error('Error reading or parsing db.json:', error);
+      res.status(500).send('Internal Server Error');
+    }
+  });
+  
+  app.post('/api/notes', (req, res) => {
+    const { body } = req;
+    const notes = JSON.parse(fs.readFileSync('db/db.json', 'utf8'));
+  
+    body.id = generateUniqueId();
+    notes.push(body);
+  
+    fs.writeFileSync('db/db.json', JSON.stringify(notes));
+    res.json(body);
+  });
+  
 
 function generateUniqueId() {
   return Math.random().toString(36).substr(2, 9);
