@@ -17,7 +17,7 @@ app.get('/notes', (req, res) => sendFile(res, 'notes'));
 app.get('*', (req, res) => sendFile(res, 'index'));
 
 // API Routes
-app.get('/api/notes', (req, res) => {
+app.get('/notes', (req, res) => {
     try {
       const notesData = fs.readFileSync('db/db.json', 'utf8');
       const notes = notesData ? JSON.parse(notesData) : [];
@@ -28,7 +28,7 @@ app.get('/api/notes', (req, res) => {
     }
   });
   
-  app.post('/api/notes', (req, res) => {
+  app.post('/notes', (req, res) => {
     const { body } = req;
     const notes = JSON.parse(fs.readFileSync('db/db.json', 'utf8'));
   
