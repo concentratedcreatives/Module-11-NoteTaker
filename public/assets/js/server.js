@@ -14,12 +14,12 @@ const handleApiError = (res, error) => (console.error('Error reading or parsing 
 app.get('/notes', (req, res) => sendFile(res, 'notes'));
 app.get('*', (req, res) => sendFile(res, 'index'));
 
-app.get('/api/notes', (req, res) => {
+app.get('/notes', (req, res) => {
   try { res.json(JSON.parse(fs.readFileSync('db/db.json', 'utf8')) || []); } 
   catch (error) { handleApiError(res, error); }
 });
 
-app.post('/api/notes', (req, res) => {
+app.post('/notes', (req, res) => {
   try {
     const { body } = req;
     const notes = [...JSON.parse(fs.readFileSync('db/db.json', 'utf8')), { ...body, id: Math.random().toString(36).substr(2, 9) }];
